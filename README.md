@@ -1,124 +1,80 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/8ec719ad-c2f8-4529-b97d-e7561a9eaf33/deploy-status)](https://app.netlify.com/sites/delog-w3layouts/deploys) &nbsp;<a href="https://twitter.com/intent/follow?screen_name=w3layouts">
-  <img src="https://img.shields.io/twitter/follow/w3layouts.svg?label=Follow%20@w3layouts" alt="Follow @w3layouts" />
-</a>
+# Text Generation with Bi-LSTMs in PyTorch
 
-# Delog - Blog for Developer and Designer
-This simple website built with GatsbyJS and Netlify CMS. Deploys on netlify with single click. This Starter is sponsered by [W3Layouts](https://w3layouts.com).
+This repository presents a model for text generation using Bi-LSTM and LSTM recurrent neural networks. The model is implemented using PyTorch's LSTMCells. 
 
-[![Delog - Gatsby Starter Demo](https://w3layouts.com/wp-content/uploads/2020/03/delog.jpg)](https://delog-w3layouts.netlify.com/)
+If you want to delve into the details regarding how the text was pre-processed, how the sequences were generated, how the Bi-LSTM & LSTM were built from the LSTMCells and how the model was trained, I highly recommend reading the blog:
+<a href="https://medium.com/@fer.neutron/text-generation-with-bi-lstm-in-pytorch-5fda6e7cc22c?source=friends_link&sk=5c18f546434e6697c1a33ffa7bd3d22b">Text Generation with Bi-LSTM in PyTorch</a>
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/W3Layouts/gatsby-starter-delog)
+## 1. Files
+- The ``data`` directory contains the text which we will work with. 
+- The ``src`` directory contains the file ``model.py``which contains the neural net definition
+- The ``utils`` directory contains helper functions such as the preprocessor and the parser
+- The ``weights`` directory contains the trained weights.
 
-Install this starter locally: (assuming you already have [NodeJS and GatsbyJS installed](https://www.gatsbyjs.org/tutorial/part-zero/))
-```bash
-gatsby new gatsby-starter-delog https://github.com/W3Layouts/gatsby-starter-delog
+## 2. The model
+The architecture of the proposed neural network consists of an embedding layer followed by a Bi-LSTM as well as a LSTM layer. Right after, the latter LSTM is connected to a linear layer. The following image describes the model architecure. 
+<p align="center">
+<img src='img/bilstm_maths.jpg'>
+</p>
+
+## 3. Dependencies
+In order to install the correct versions of each dependency, it is highly suggested to work under a virtual environment. In this case, I'm using the ``pipenv`` environment. To install the dependencies you just need type:
 ```
+pipenv install
+```
+then, in order to lauch the environment you would need to type:
+```
+pipenv shell
+```
+## 4. Demo
+For this demos we are going to make use of the book that is in the ``data/book`` directory, the credentials of the book are:
+```
+book_name: Jack Among the Indians
+author: George Bird Grinnell
+chapter: 1
+url: https://www.gutenberg.org/cache/epub/46205/pg46205.txt
+```
+First lines of the book:
+```
+The train rushed down the hill, with a long shrieking whistle, and then
+began to go more and more slowly. Thomas had brushed Jack off and
+thanked him for the coin that he put in his hand, and with the bag in
+one hand and the stool in the other now went out onto the platform and
+down the steps, Jack closely following.
+```
+The best results were obtained by training the model with the following parameters:
+```
+python -B main.py --window 100 --epochs 50 --hidden_dim 128 --batch_size 128 --learning_rate 0.001
+```
+The weights of the trained model are stored in the ``weights/``directory. 
+To generate text, we are going to load the weights of the trained model as follows:
+```
+python -B main.py --load_model True --model [weights/your_model.pt]
+```
+The text generated is:
+```
+Seed:
+one of the prairie swellswhich gave a little wider view than most of them 
+jack saw quite close to the
 
-Instructions also available at W3Layouts [Delog Launch Article](https://w3layouts.com/articles/delog-gatsby-starter-netlify-cms/).
+Prediction:
+one of the prairie swellswhich gave a little wider view than most of them 
+jack saw quite close to the wnd banngessejang boffff we outheaedd we band 
+r hes tller a reacarof t t alethe ngothered uhe th wengaco ack fof ace ca  
+e s alee bin  cacotee tharss th band fofoutod we we ins sange trre anca y 
+w farer we sewigalfetwher d e  we n s shed pack wngaingh tthe we the we 
+javes t supun f the har man bllle s ng ou   y anghe ond we nd ba a  she t 
+t anthendwe wn me anom ly tceaig t i isesw arawns t d ks wao thalac tharr 
+jad  d anongive where the awe w we he is ma mie cack seat sesant sns t imes 
+hethof riges we he d ooushe he hang out f t thu inong bll llveco we see s 
+the he haa is s igg merin ishe d t san wack owhe o or th we sbe se we we 
+inange t ts wan br seyomanthe harntho thengn  th me ny we ke in acor offff  
+of wan  s arghe we t angorro the wand be thing a sth t tha alelllll willllsse 
+of s wed w brstougof bage orore he anthesww were ofawe ce qur the he sbaing 
+tthe bytondece nd t llllifsffo acke o t in ir me hedlff scewant pi t bri pi 
+owasem the awh thorathas th we hed ofainginictoplid we me
+```
+## 5. Comments
+Any comment, suggestion or colaboration, just reach me out at: fer.neutron@gmail.com
 
-## Features
-- Built with GatsbyJS and Netlify CMS
-- Option to Add, Edit, Update and Delete posts via Netlify CMS
-- SEO friendly - Option to Add meta description
-- In-built contact form powered by [W3Layouts](https://w3layouts.com) 
-- Comes with dark mode
-
----
-
-## Documentation
-
-* Once you hit "[Deploy to Netlify](https://app.netlify.com/start/deploy?repository=https://github.com/W3Layouts/gatsby-starter-delog)"
-* Connect Github
-* Enter Repository Name
-* And your site starts build process. After the build process your website is live
-
-### Changing repositary URL for Netlify CMS access
-You need to change repo URL to your own `repo` at `/static/admin/config.yml`, for example `username/repo-name`
-
-### Creating Github OAuth Client ID
-* Goto Github [Developer Settings](https://github.com/settings/developers)
-* **New OAuth** 
-* Enter Application name
-* Homepage URL as Netlify URL
-* And **Authorization callback URL** to `https://api.netlify.com/auth/done`)
-* Once Client ID and Secret token is generated configure same in [Netlify Access Control](#accessing-netlify-cms-admin) as described.
-
-### Accessing Netlify CMS Admin
-* Goto your Netlify site admin
-* Goto **Access Control** > **OAuth** then **Install Provider** you need to select provider as `Github` as add `Client ID` and `Secret` 
-* Your Netlify CMS is ready. Goto you netlify site URL and append `/admin/`. for example `example.netlify.com/admin/`, You will see login with Github button.
-
-### Managing Blog Posts in Netlify CMS
-* Once logged in you will find all the blog post listed here.
-* You can create, edit, update and delete like any CMS
-
-### Editing Meta Data
-Inside you Netlify CMS admin, `Settings > Config` or you can go to `site-meta-data.json`. Here you can edit following details
-* Title
-* Description
-* Site URL
-* Homepage Title
-* Homepage Description
-* To get the Contact form working. you need too add a form at [W3Layouts forms](https://my.w3layouts.com/Forms/). Follow the steps [How to enable W3Layouts Contact form](https://w3layouts.com/articles/introducing-contact-forms-for-static-websites/) instructions to create a form then your contact form is all set.
-
-### Add Google Analytics
-Change `trackingId` in `gatsby-config.js` at `gatsby-plugin-google-analytics` plugin
-
----
-
-I hope you will build a great website with Delog. If you like it please spread the word, Feel free to contribute and raise a pull request :)
-
-For issues,feedback on enhancement or sharing your new awesome website built with delog. [Create New Issue](https://github.com/W3Layouts/gatsby-starter-delog/issues/new) Here
-
----
-
-## Roadmap
-We are maintaining future task in [Github Project](https://github.com/W3Layouts/gatsby-starter-delog/projects/1), even though most changes are instantaious. We try keep them posted here.
-
----
-
-## Credits
-- Awesome image used in demo is from [Unsplash](https://unsplash.com)
-- CSS and SVG Icons by [CSS.gg](https://css.gg)
-
----
-
-## Changelog
-All notable changes to this project are listed here.
-
-### [1.6.0] - 2020-05-03
-#### Added
-- Custom 404 page.
-- Site name will be appended in blog posts and contact page.
-- Reordering fields in Netlify CMS for better flow of post creation.
-- Validation for path in Netlify CMS
-
-### [1.5.0] - 2020-05-03
-#### Added
-- Settings page in Netlify CMS to customize site meta data.
-- Site meta data is pulled from `site-meta-data.json`. maintained via Netlify CMS
-
-### [1.4.0] - 2020-05-01
-#### Added
-- `gatsby-plugin-sitemap` Creates a sitemap for your Gatsby site in production.
-
-#### Changed
-- Changelog improvements
-- Comments on `gatsby-config.js`
-- Comments on `static/admin/config.yml`
-
-### [1.3.0] - 2020-04-30
-#### Added
-- `gatsby-plugin-offline` drop-in support for making a GatsbyJS site work offline and more resistant to bad network connections.
-- `gatsby-plugin-manifest` configures GatsbyJS to create a manifest.webmanifest file on every site build
-
-### [1.2.0] - 2020-04-28
-#### Added 
-- GatsbyJS Increment builds with Netlify deployment
-
-### [1.1.0] - 2020-04-21
-#### Added 
-- Dark mode compatibitly and toggle for user preference
-
-### [1.0.0] - 2020-03-14
-- Launch of GatsbyJS and Netlify CMS based starter `gatsby-starter-delog`
+Feel free to clone or fork! 
